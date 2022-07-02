@@ -19,7 +19,8 @@ fn get_blocks() -> Vec<(i32, f32)> {
 fn main() -> std::io::Result<()> {
     let blocks = get_blocks();
 
-    let roll = Roll::new();
+    let mut roll = Roll::new();
+    roll.beats(4);
     roll.draw("foo.ppm", &blocks);
 
     Ok(())
