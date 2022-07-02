@@ -1,5 +1,5 @@
 mod duration;
-pub use duration::Duration;
+pub use duration::{Len,Value};
 
 mod octave;
 pub use octave::Octave;
@@ -13,15 +13,15 @@ pub mod graph;
 pub struct Note {
     pitch_class: PitchClass,
     octave: Octave,
-    duration: Duration,
+    value: Value,
 }
 
 impl Note {
-    pub fn new(pitch_class: PitchClass, octave: Octave, duration: Duration) -> Self {
+    pub fn new(pitch_class: PitchClass, octave: Octave, value: Value) -> Self {
         Self {
             pitch_class,
             octave,
-            duration,
+            value,
         }
     }
 
@@ -30,7 +30,7 @@ impl Note {
     }
 
     pub fn beats(&self) -> f32 {
-        self.duration.beats()
+        self.value.beats()
     }
 }
 
