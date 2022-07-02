@@ -36,10 +36,8 @@ impl Octave {
     }
 
     pub fn raw_freq(&self, pc: &PitchClass) -> f64 {
-        let distf = self.halftones_from_root(pc) as f64;
-        2.0_f64.powf(distf / 12.0) * CONCERT_A_FREQ as f64
-        // let dist = self.midi(pc) - 69;
-        // 2.0_f64.powf(dist as f64 / 12.0) * CONCERT_A_FREQ as f64
+        let dist = self.midi(pc) - 69;
+        2.0_f64.powf(dist as f64 / 12.0) * CONCERT_A_FREQ as f64
     }
 }
 
