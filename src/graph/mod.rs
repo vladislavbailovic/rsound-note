@@ -12,13 +12,13 @@ fn color(raw: u32) -> (u8, u8, u8) {
     )
 }
 
-pub fn save(blocks: &[(i32, i32)]) -> std::io::Result<()> {
+pub fn save(blocks: &[(i32, f32)]) -> std::io::Result<()> {
     let ppm_width: i32 = MIN_WIDTH;
     let ppm_height: i32 = MAX_HEIGHT;
     let max_size = 3 * ppm_width * ppm_height;
 
     let bheight: i32 = 10;
-    let bwidth: i32 = 15;
+    let bwidth: i32 = 5;
 
     let mut buffer = vec![0; max_size as usize];
 
@@ -45,7 +45,8 @@ pub fn save(blocks: &[(i32, i32)]) -> std::io::Result<()> {
     let mut relx = 0;
     for block in blocks {
         let posy = block.0 as usize * bheight as usize;
-        let posx = relx + (block.1 * bwidth) as usize;
+        let posx = relx + (block.1 as usize * bwidth as usize) as usize;
+        println!("{}: {} {}", posy, relx, block.1);
         for y in posy..posy + bheight as usize {
             for x in relx..posx {
                 let offset = ((y * ppm_width as usize * 3) + (x * 3)) as usize;

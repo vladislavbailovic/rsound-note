@@ -1,3 +1,6 @@
+mod duration;
+pub use duration::Duration;
+
 mod octave;
 pub use octave::Octave;
 
@@ -10,18 +13,24 @@ pub mod graph;
 pub struct Note {
     pitch_class: PitchClass,
     octave: Octave,
+    duration: Duration,
 }
 
 impl Note {
-    pub fn new(pitch_class: PitchClass, octave: Octave) -> Self {
+    pub fn new(pitch_class: PitchClass, octave: Octave, duration: Duration) -> Self {
         Self {
             pitch_class,
             octave,
+            duration,
         }
     }
 
     pub fn midi(&self) -> i32 {
         self.pitch_class.midi(&self.octave)
+    }
+
+    pub fn beats(&self) -> f32 {
+        self.duration.beats()
     }
 }
 
