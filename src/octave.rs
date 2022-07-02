@@ -1,5 +1,5 @@
 use crate::pitch_class::*;
-use crate::{CONCERT_A_FREQ};
+use crate::{Numeric, Midi, Freq};
 
 #[derive(Copy, Clone, Debug)]
 pub enum Octave {
@@ -16,23 +16,20 @@ pub enum Octave {
     C9,
 }
 
-impl Octave {
-    pub fn freq(&self, pc: &PitchClass) -> f64 {
-        (self.raw_freq(pc) * 100.0).round() / 100.0
+impl Numeric for Octave {
+    fn numeric(&self) -> i32 {
+        *self as i32
     }
-
-    pub fn midi(&self, pc: &PitchClass) -> i32 {
-        let tone_ord = *pc as i32;
-        let octave_ord = *self as i32;
+}
+impl Midi<PitchClass> for Octave {
+    fn midi(&self, other: &PitchClass) -> i32 {
+        let tone_ord = other.numeric();
+        let octave_ord = self.numeric();
 
         127.min(tone_ord + octave_ord * 12)
     }
-
-    pub fn raw_freq(&self, pc: &PitchClass) -> f64 {
-        let dist = self.midi(pc) - 69;
-        2.0_f64.powf(dist as f64 / 12.0) * CONCERT_A_FREQ as f64
-    }
 }
+impl Freq<PitchClass> for Octave {}
 
 #[cfg(test)]
 mod tests {
