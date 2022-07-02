@@ -4,18 +4,18 @@ pub mod pitch_class;
 #[cfg(feature="graph")]
 pub mod graph;
 
-trait Numeric {
+pub trait Numeric {
     fn numeric(&self) -> i32;
 }
 
-trait Midi<T>
+pub trait Midi<T>
 where
     T: Numeric,
 {
     fn midi(&self, other: &T) -> i32;
 }
 
-trait Freq<T>: Midi<T>
+pub trait Freq<T>: Midi<T>
 where
     T: Numeric,
 {

@@ -12,15 +12,7 @@ fn color(raw: u32) -> (u8, u8, u8) {
     )
 }
 
-fn get_blocks() -> &'static [(i32, i32)] {
-    &[
-        (10, 2),
-        (11, 1),
-        (12, 3),
-    ]
-}
-
-pub fn save() -> std::io::Result<()> {
+pub fn save(blocks: &[(i32, i32)]) -> std::io::Result<()> {
     let ppm_width: i32 = MIN_WIDTH;
     let ppm_height: i32 = MAX_HEIGHT;
     let max_size = 3 * ppm_width * ppm_height;
@@ -51,7 +43,7 @@ pub fn save() -> std::io::Result<()> {
     // Blocks
     let block_color = color(0x33AA33);
     let mut relx = 0;
-    for block in get_blocks() {
+    for block in blocks {
         let posy = block.0 as usize * bheight as usize;
         let posx = relx + (block.1 * bwidth) as usize;
         for y in posy..posy+bheight as usize {
