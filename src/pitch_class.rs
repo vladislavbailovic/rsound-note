@@ -1,5 +1,5 @@
 use crate::octave::*;
-use crate::{CONCERT_A_FREQ, CONCERT_A_ORDER};
+use crate::{CONCERT_A_FREQ};
 
 #[derive(Copy, Clone, Debug)]
 pub enum PitchClass {
@@ -18,13 +18,6 @@ pub enum PitchClass {
 }
 
 impl PitchClass {
-    fn halftones_from_root(&self, oct: &Octave) -> i32 {
-        let tone_ord = *self as i32;
-        let octave_ord = *oct as i32;
-
-        (tone_ord + (octave_ord - 1) * 12) - CONCERT_A_ORDER
-    }
-
     pub fn freq(&self, oct: &Octave) -> f64 {
         (self.raw_freq(oct) * 100.0).round() / 100.0
     }
@@ -45,13 +38,6 @@ impl PitchClass {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn test_dist() {
-        assert_eq!(PitchClass::A.halftones_from_root(&Octave::C4), 0);
-        assert_eq!(PitchClass::C.halftones_from_root(&Octave::C5), 3);
-        assert_eq!(PitchClass::F.halftones_from_root(&Octave::C4), -4);
-    }
 
     #[test]
     fn test_freq() {
