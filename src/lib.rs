@@ -1,5 +1,8 @@
-mod octave;
-mod pitch_class;
+pub mod octave;
+pub mod pitch_class;
+
+#[cfg(feature="graph")]
+pub mod graph;
 
 trait Numeric {
     fn numeric(&self) -> i32;
