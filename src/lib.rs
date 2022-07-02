@@ -1,21 +1,42 @@
-pub mod octave;
-pub mod pitch_class;
+mod octave;
+pub use octave::Octave;
 
-#[cfg(feature="graph")]
+mod pitch_class;
+pub use pitch_class::PitchClass;
+
+#[cfg(feature = "graph")]
 pub mod graph;
 
-pub trait Numeric {
+pub struct Note {
+    pitch_class: PitchClass,
+    octave: Octave,
+}
+
+impl Note {
+    pub fn new(pitch_class: PitchClass, octave: Octave) -> Self {
+        Self {
+            pitch_class,
+            octave,
+        }
+    }
+
+    pub fn midi(&self) -> i32 {
+        self.pitch_class.midi(&self.octave)
+    }
+}
+
+trait Numeric {
     fn numeric(&self) -> i32;
 }
 
-pub trait Midi<T>
+trait Midi<T>
 where
     T: Numeric,
 {
     fn midi(&self, other: &T) -> i32;
 }
 
-pub trait Freq<T>: Midi<T>
+trait Freq<T>: Midi<T>
 where
     T: Numeric,
 {

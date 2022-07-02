@@ -1,24 +1,21 @@
-#[cfg(feature="graph")]
+#[cfg(feature = "graph")]
 use note::graph;
 
-use note::octave::*;
-use note::pitch_class::*;
-use note::Midi;
+use note::*;
 
 fn get_blocks() -> Vec<(i32, i32)> {
     vec![
         // Midi, duration
-        (PitchClass::A.midi(&Octave::C0), 1),
-        (PitchClass::C.midi(&Octave::C1), 3),
-        (PitchClass::A.midi(&Octave::C0), 1),
-        (PitchClass::C.midi(&Octave::C1), 2),
+        (Note::new(PitchClass::A, Octave::C0).midi(), 1),
+        (Note::new(PitchClass::C, Octave::C1).midi(), 3),
+        (Note::new(PitchClass::A, Octave::C0).midi(), 1),
+        (Note::new(PitchClass::C, Octave::C1).midi(), 2),
     ]
 }
 
-#[cfg(feature="graph")]
+#[cfg(feature = "graph")]
 fn main() -> std::io::Result<()> {
     graph::save(&get_blocks())?;
 
     Ok(())
 }
-

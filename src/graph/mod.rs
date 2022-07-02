@@ -1,14 +1,14 @@
 use std::fs::File;
-use std::io::{Write,BufWriter};
+use std::io::{BufWriter, Write};
 
 const MIN_WIDTH: i32 = 800;
 const MAX_HEIGHT: i32 = 600;
 
 fn color(raw: u32) -> (u8, u8, u8) {
     (
-        ((raw >> 16)  & 255) as u8,
-        ((raw >> 8)  & 255) as u8,
-        (raw & 255) as u8
+        ((raw >> 16) & 255) as u8,
+        ((raw >> 8) & 255) as u8,
+        (raw & 255) as u8,
     )
 }
 
@@ -29,13 +29,13 @@ pub fn save(blocks: &[(i32, i32)]) -> std::io::Result<()> {
         for x in 0..ppm_width {
             let offset = ((y * ppm_width * 3) + (x * 3)) as usize;
             if x % bwidth == 0 || y % bheight == 0 {
-                buffer[offset+0] = fg_color.0;
-                buffer[offset+1] = fg_color.1;
-                buffer[offset+2] = fg_color.2;
+                buffer[offset + 0] = fg_color.0;
+                buffer[offset + 1] = fg_color.1;
+                buffer[offset + 2] = fg_color.2;
             } else {
-                buffer[offset+0] = bg_color.0;
-                buffer[offset+1] = bg_color.1;
-                buffer[offset+2] = bg_color.2;
+                buffer[offset + 0] = bg_color.0;
+                buffer[offset + 1] = bg_color.1;
+                buffer[offset + 2] = bg_color.2;
             }
         }
     }
@@ -46,12 +46,12 @@ pub fn save(blocks: &[(i32, i32)]) -> std::io::Result<()> {
     for block in blocks {
         let posy = block.0 as usize * bheight as usize;
         let posx = relx + (block.1 * bwidth) as usize;
-        for y in posy..posy+bheight as usize {
+        for y in posy..posy + bheight as usize {
             for x in relx..posx {
                 let offset = ((y * ppm_width as usize * 3) + (x * 3)) as usize;
-                buffer[offset+0] = block_color.0;
-                buffer[offset+1] = block_color.1;
-                buffer[offset+2] = block_color.2;
+                buffer[offset + 0] = block_color.0;
+                buffer[offset + 1] = block_color.1;
+                buffer[offset + 2] = block_color.2;
             }
         }
         relx = posx;
@@ -70,8 +70,8 @@ mod tests {
 
     #[test]
     fn test_color() {
-        assert_eq!(color(0xFFFF00), (255,255,0));
-        assert_eq!(color(0xFF0000), (255,0,0));
+        assert_eq!(color(0xFFFF00), (255, 255, 0));
+        assert_eq!(color(0xFF0000), (255, 0, 0));
         assert_eq!(color(0x00FF00), (0, 255, 0));
     }
 }
@@ -109,4 +109,3 @@ mod tests {
 
 //     Ok(())
 // }
-
