@@ -1,5 +1,5 @@
 use crate::Midi;
-use crate::{Len, Octave, PitchClass, Value};
+use crate::{Octave, PitchClass, Value};
 
 pub struct Note {
     pitch_class: PitchClass,
@@ -41,6 +41,7 @@ macro_rules! note {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::Len;
 
     #[test]
     fn note_macro_default_len() {
