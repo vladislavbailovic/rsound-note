@@ -51,6 +51,51 @@ mod tests {
     use super::*;
 
     #[test]
+    fn value_from() {
+        if let Value::Len(Len::Double) = Value::from(2, 1, None) {
+            assert!(true);
+        } else {
+            assert!(false, "Double note not recognized");
+        }
+        if let Value::Len(Len::Whole) = Value::from(1, 1, None) {
+            assert!(true);
+        } else {
+            assert!(false, "Whole note not recognized");
+        }
+        if let Value::Len(Len::Half) = Value::from(1, 2, None) {
+            assert!(true);
+        } else {
+            assert!(false, "Half note not recognized");
+        }
+        if let Value::Len(Len::Quarter) = Value::from(1, 4, None) {
+            assert!(true);
+        } else {
+            assert!(false, "Quarter note not recognized");
+        }
+
+        if let Value::Len(Len::Eighth) = Value::from(1, 8, None) {
+            assert!(true);
+        } else {
+            assert!(false, "Eighth note not recognized");
+        }
+        if let Value::Len(Len::Sixteenth) = Value::from(1, 16, None) {
+            assert!(true);
+        } else {
+            assert!(false, "Sixteenth note not recognized");
+        }
+        if let Value::Len(Len::Thirtysecond) = Value::from(1, 32, None) {
+            assert!(true);
+        } else {
+            assert!(false, "Thirtysecond note not recognized");
+        }
+        if let Value::Len(Len::Sixtyfourth) = Value::from(1, 64, None) {
+            assert!(true);
+        } else {
+            assert!(false, "Sixtyfourth note not recognized");
+        }
+    }
+
+    #[test]
     fn value_beats_len() {
         assert_eq!(Value::Len(Len::Quarter).beats(), 1.0);
         assert_eq!(Value::Len(Len::Half).beats(), 0.5);
