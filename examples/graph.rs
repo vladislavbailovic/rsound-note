@@ -5,10 +5,10 @@ use note::*;
 
 fn get_blocks() -> Vec<(i32, f32)> {
     vec![
-        Note::new(PitchClass::A, Octave::C0, Value::Len(Len::Quarter)),
-        Note::new(PitchClass::C, Octave::C1, Value::Len(Len::Eighth)),
-        Note::new(PitchClass::A, Octave::C0, Value::Len(Len::Sixteenth)),
-        Note::new(PitchClass::B, Octave::C0, Value::Len(Len::Half)),
+        note![A: C0, 1 / 4],
+        note![C: C1, 1 / 8],
+        note![A: C0, 1 / 16],
+        note![B: C0, 1 / 2],
     ]
     .iter()
     .map(|x| (x.midi(), 4.0 / x.beats()))

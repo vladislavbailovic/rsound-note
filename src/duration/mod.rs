@@ -4,6 +4,7 @@ pub use len::*;
 mod value;
 pub use value::*;
 
+#[macro_export]
 macro_rules! val {
     ($numerator:tt / $denominator:tt T) => {
         Value::from($numerator, $denominator, Some(1))

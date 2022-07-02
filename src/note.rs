@@ -25,6 +25,7 @@ impl Note {
     }
 }
 
+#[macro_export]
 macro_rules! note {
     ($pc:tt : $oct:tt, $numerator:tt / $denominator:tt T) => {
         Note::new(PitchClass::$pc, Octave::$oct, val![$numerator/$denominator T])
