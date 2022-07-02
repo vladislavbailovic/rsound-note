@@ -1,7 +1,7 @@
 use crate::pitch_class::*;
 use crate::{Freq, Midi, Numeric};
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Octave {
     Cm1,
     C0,

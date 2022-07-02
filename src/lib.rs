@@ -1,5 +1,6 @@
+#[macro_use]
 mod duration;
-pub use duration::{Len,Value};
+pub use duration::{Len, Value};
 
 mod octave;
 pub use octave::Octave;
@@ -7,6 +8,7 @@ pub use octave::Octave;
 mod pitch_class;
 pub use pitch_class::PitchClass;
 
+#[macro_use]
 mod note;
 pub use crate::note::*;
 

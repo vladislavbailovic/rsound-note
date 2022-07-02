@@ -1,6 +1,6 @@
 use crate::Len;
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Value {
     Len(Len),
     Dot(Len),
@@ -17,13 +17,13 @@ impl Value {
                 16 => Len::Sixteenth,
                 32 => Len::Thirtysecond,
                 64 => Len::Sixtyfourth,
-                _ => Len::Quarter
+                _ => Len::Quarter,
             },
             2 => match denominator {
                 1 => Len::Double,
-                _ => Len::Quarter
+                _ => Len::Quarter,
             },
-            _ => Len::Quarter
+            _ => Len::Quarter,
         };
         match dot {
             None => Value::Len(len),
@@ -147,4 +147,3 @@ mod tests {
         assert_eq!(Value::Dot(Len::Sixtyfourth).secs(60.0), 0.09375);
     }
 }
-
