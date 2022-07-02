@@ -1,5 +1,5 @@
 #[cfg(feature = "graph")]
-use note::graph;
+use note::graph::Roll;
 
 use note::*;
 
@@ -18,8 +18,9 @@ fn get_blocks() -> Vec<(i32, f32)> {
 #[cfg(feature = "graph")]
 fn main() -> std::io::Result<()> {
     let blocks = get_blocks();
-    println!("{:?}", blocks);
-    graph::save(&blocks)?;
+
+    let roll = Roll::new();
+    roll.draw("foo.ppm", &blocks);
 
     Ok(())
 }
