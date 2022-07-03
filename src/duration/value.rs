@@ -114,15 +114,39 @@ mod tests {
 
     #[test]
     fn value_beats_dot() {
-        assert_eq!(Value::Dot(Len::Quarter).per_beat(), 1.5);
-        assert_eq!(Value::Dot(Len::Half).per_beat(), 0.75);
-        assert_eq!(Value::Dot(Len::Whole).per_beat(), 0.375);
-        assert_eq!(Value::Dot(Len::Double).per_beat(), 0.1875);
+        assert_eq!(
+            (Value::Dot(Len::Quarter).per_beat() * 100.00).round() / 100.00,
+            0.67
+        );
+        assert_eq!(
+            (Value::Dot(Len::Half).per_beat() * 100.00).round() / 100.00,
+            0.33
+        );
+        assert_eq!(
+            (Value::Dot(Len::Whole).per_beat() * 100.00).round() / 100.00,
+            0.17
+        );
+        assert_eq!(
+            (Value::Dot(Len::Double).per_beat() * 100.00).round() / 100.00,
+            0.08
+        );
 
-        assert_eq!(Value::Dot(Len::Eighth).per_beat(), 3.0);
-        assert_eq!(Value::Dot(Len::Sixteenth).per_beat(), 6.0);
-        assert_eq!(Value::Dot(Len::Thirtysecond).per_beat(), 12.0);
-        assert_eq!(Value::Dot(Len::Sixtyfourth).per_beat(), 24.0);
+        assert_eq!(
+            (Value::Dot(Len::Eighth).per_beat() * 100.00).round() / 100.00,
+            1.33
+        );
+        assert_eq!(
+            (Value::Dot(Len::Sixteenth).per_beat() * 100.00).round() / 100.00,
+            2.67
+        );
+        assert_eq!(
+            (Value::Dot(Len::Thirtysecond).per_beat() * 100.00).round() / 100.00,
+            5.33
+        );
+        assert_eq!(
+            (Value::Dot(Len::Sixtyfourth).per_beat() * 100.00).round() / 100.00,
+            10.67
+        );
     }
 
     #[test]
