@@ -35,8 +35,7 @@ impl Value {
         match &self {
             Value::Len(ln) => ln.per_beat(),
             Value::Dot(ln) => {
-                let val = ln.per_beat();
-                let beats = 1.0 / val;
+                let beats = 1.0 / ln.per_beat();
                 let dot_beats = beats * 1.5;
                 1.0 / dot_beats
             }
