@@ -6,12 +6,17 @@ use note::*;
 fn get_blocks() -> Vec<(i32, f32)> {
     vec![
         note![A: C0, 1 / 4],
-        note![C: C1, 1 / 8],
-        note![A: C0, 1 / 16],
-        note![B: C0, 1 / 2],
+        note![C: C1, 1 / 4 T],
+        note![A: C0, 1 / 8],
+        note![B: C0, 1 / 8 T],
     ]
     .iter()
-    .map(|x| (x.midi(), 4.0 / x.beats()))
+    .map(|n| {
+        let y = n.midi();
+        let beats = 1.0 / n.per_beat();
+        let bars = beats * 4.0;
+        (y, bars)
+    })
     .collect()
 }
 

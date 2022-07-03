@@ -31,10 +31,15 @@ impl Value {
         }
     }
 
-    pub(crate) fn beats(&self) -> f32 {
+    pub(crate) fn per_beat(&self) -> f32 {
         match &self {
-            Value::Len(ln) => ln.beats(),
-            Value::Dot(ln) => ln.beats() * 1.5,
+            Value::Len(ln) => ln.per_beat(),
+            Value::Dot(ln) => {
+                let val = ln.per_beat();
+                let beats = 1.0 / val;
+                let dot_beats = beats * 1.5;
+                1.0 / dot_beats
+            }
         }
     }
 
@@ -97,28 +102,28 @@ mod tests {
 
     #[test]
     fn value_beats_len() {
-        assert_eq!(Value::Len(Len::Quarter).beats(), 1.0);
-        assert_eq!(Value::Len(Len::Half).beats(), 0.5);
-        assert_eq!(Value::Len(Len::Whole).beats(), 0.25);
-        assert_eq!(Value::Len(Len::Double).beats(), 0.125);
+        assert_eq!(Value::Len(Len::Quarter).per_beat(), 1.0);
+        assert_eq!(Value::Len(Len::Half).per_beat(), 0.5);
+        assert_eq!(Value::Len(Len::Whole).per_beat(), 0.25);
+        assert_eq!(Value::Len(Len::Double).per_beat(), 0.125);
 
-        assert_eq!(Value::Len(Len::Eighth).beats(), 2.0);
-        assert_eq!(Value::Len(Len::Sixteenth).beats(), 4.0);
-        assert_eq!(Value::Len(Len::Thirtysecond).beats(), 8.0);
-        assert_eq!(Value::Len(Len::Sixtyfourth).beats(), 16.0);
+        assert_eq!(Value::Len(Len::Eighth).per_beat(), 2.0);
+        assert_eq!(Value::Len(Len::Sixteenth).per_beat(), 4.0);
+        assert_eq!(Value::Len(Len::Thirtysecond).per_beat(), 8.0);
+        assert_eq!(Value::Len(Len::Sixtyfourth).per_beat(), 16.0);
     }
 
     #[test]
     fn value_beats_dot() {
-        assert_eq!(Value::Dot(Len::Quarter).beats(), 1.5);
-        assert_eq!(Value::Dot(Len::Half).beats(), 0.75);
-        assert_eq!(Value::Dot(Len::Whole).beats(), 0.375);
-        assert_eq!(Value::Dot(Len::Double).beats(), 0.1875);
+        assert_eq!(Value::Dot(Len::Quarter).per_beat(), 1.5);
+        assert_eq!(Value::Dot(Len::Half).per_beat(), 0.75);
+        assert_eq!(Value::Dot(Len::Whole).per_beat(), 0.375);
+        assert_eq!(Value::Dot(Len::Double).per_beat(), 0.1875);
 
-        assert_eq!(Value::Dot(Len::Eighth).beats(), 3.0);
-        assert_eq!(Value::Dot(Len::Sixteenth).beats(), 6.0);
-        assert_eq!(Value::Dot(Len::Thirtysecond).beats(), 12.0);
-        assert_eq!(Value::Dot(Len::Sixtyfourth).beats(), 24.0);
+        assert_eq!(Value::Dot(Len::Eighth).per_beat(), 3.0);
+        assert_eq!(Value::Dot(Len::Sixteenth).per_beat(), 6.0);
+        assert_eq!(Value::Dot(Len::Thirtysecond).per_beat(), 12.0);
+        assert_eq!(Value::Dot(Len::Sixtyfourth).per_beat(), 24.0);
     }
 
     #[test]

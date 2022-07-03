@@ -1,6 +1,7 @@
 use crate::Midi;
 use crate::{Octave, PitchClass, Value};
 
+#[derive(Debug)]
 pub struct Note {
     pitch_class: PitchClass,
     octave: Octave,
@@ -20,8 +21,8 @@ impl Note {
         self.pitch_class.midi(&self.octave)
     }
 
-    pub fn beats(&self) -> f32 {
-        self.value.beats()
+    pub fn per_beat(&self) -> f32 {
+        self.value.per_beat()
     }
 }
 

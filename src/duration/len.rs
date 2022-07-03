@@ -11,13 +11,13 @@ pub enum Len {
 }
 
 impl Len {
-    pub(crate) fn beats(&self) -> f32 {
+    pub(crate) fn per_beat(&self) -> f32 {
         let ord = *self as i32 + 1;
         2.0_f32.powf(ord as f32) / 16.0
     }
 
     pub(crate) fn secs(&self, bpm: f32) -> f32 {
-        let beats = self.beats();
+        let beats = self.per_beat();
         60.0 / bpm / beats
     }
 }
@@ -27,16 +27,16 @@ mod tests {
     use super::*;
 
     #[test]
-    fn length_beats() {
-        assert_eq!(Len::Quarter.beats(), 1.0);
-        assert_eq!(Len::Half.beats(), 0.5);
-        assert_eq!(Len::Whole.beats(), 0.25);
-        assert_eq!(Len::Double.beats(), 0.125);
+    fn length_per_beat() {
+        assert_eq!(Len::Quarter.per_beat(), 1.0);
+        assert_eq!(Len::Half.per_beat(), 0.5);
+        assert_eq!(Len::Whole.per_beat(), 0.25);
+        assert_eq!(Len::Double.per_beat(), 0.125);
 
-        assert_eq!(Len::Eighth.beats(), 2.0);
-        assert_eq!(Len::Sixteenth.beats(), 4.0);
-        assert_eq!(Len::Thirtysecond.beats(), 8.0);
-        assert_eq!(Len::Sixtyfourth.beats(), 16.0);
+        assert_eq!(Len::Eighth.per_beat(), 2.0);
+        assert_eq!(Len::Sixteenth.per_beat(), 4.0);
+        assert_eq!(Len::Thirtysecond.per_beat(), 8.0);
+        assert_eq!(Len::Sixtyfourth.per_beat(), 16.0);
     }
 
     #[test]
