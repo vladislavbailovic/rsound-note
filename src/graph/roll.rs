@@ -23,7 +23,7 @@ impl Roll {
         self
     }
 
-    pub fn graph(&self, raw: &[(i32, f32)]) -> Vec<u8> {
+    pub fn graph(&self, raw: &[(Option<i32>, f32)]) -> Vec<u8> {
         let max_size = 3 * self.width * self.height;
         let bheight: usize = 10;
         let bwidth: usize = 25;
@@ -35,14 +35,16 @@ impl Roll {
         let block_color = color(0x33AA33);
         let mut relx = 0;
         for block in raw {
-            let posy = block.0 as usize * bheight;
             let posx = relx + (block.1 as usize * bwidth) as usize;
-            for y in posy..posy + bheight {
-                for x in relx..posx {
-                    let offset = (y * self.width * 3) + (x * 3);
-                    buffer[offset + 0] = block_color.0;
-                    buffer[offset + 1] = block_color.1;
-                    buffer[offset + 2] = block_color.2;
+            if let Some(block_y) = block.0 {
+                let posy = block_y as usize * bheight;
+                for y in posy..posy + bheight {
+                    for x in relx..posx {
+                        let offset = (y * self.width * 3) + (x * 3);
+                        buffer[offset + 0] = block_color.0;
+                        buffer[offset + 1] = block_color.1;
+                        buffer[offset + 2] = block_color.2;
+                    }
                 }
             }
             relx = posx;
@@ -51,7 +53,7 @@ impl Roll {
         buffer
     }
 
-    pub fn draw(&self, fname: &str, raw: &[(i32, f32)]) -> std::io::Result<()> {
+    pub fn draw(&self, fname: &str, raw: &[(Option<i32>, f32)]) -> std::io::Result<()> {
         let mut p = BufWriter::new(File::create(fname)?);
         p.write(format!("P6 {} {} 255\n", self.width, self.height).as_bytes())?;
         p.write(&self.graph(raw))?;

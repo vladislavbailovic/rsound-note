@@ -3,12 +3,25 @@ use note::graph::Roll;
 
 use note::*;
 
-fn get_blocks() -> Vec<(i32, f32)> {
-    vec![
+macro_rules! sequence {
+    ($($x:expr),+) => {
+        {
+            let mut sequence: Vec<Box<dyn Notation>> = Vec::new();
+            $(sequence.push(Box::new($x));)*
+            sequence
+        }
+    }
+}
+
+fn get_blocks() -> Vec<(Option<i32>, f32)> {
+    sequence![
         note![A: C0, 1 / 4],
+        pause![1 / 14],
         note![C: C1, 1 / 4 T],
+        pause![1 / 14],
         note![A: C0, 1 / 8],
-        note![B: C0, 1 / 8 T],
+        pause![1 / 14],
+        note![B: C0, 1 / 8 T]
     ]
     .iter()
     .map(|n| {
