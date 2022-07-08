@@ -39,7 +39,7 @@ impl Roll {
             let posx = relx + (block.1 as usize * bwidth) as usize;
             for y in posy..posy + bheight {
                 for x in relx..posx {
-                    let offset = ((y * self.width * 3) + (x * 3));
+                    let offset = (y * self.width * 3) + (x * 3);
                     buffer[offset + 0] = block_color.0;
                     buffer[offset + 1] = block_color.1;
                     buffer[offset + 2] = block_color.2;
