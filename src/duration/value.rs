@@ -4,30 +4,35 @@ use crate::Len;
 pub enum Value {
     Len(Len),
     Dot(Len),
+    Frac(f32),
 }
 
 impl Value {
     pub fn from(numerator: usize, denominator: usize, dot: Option<usize>) -> Value {
         let len = match numerator {
             1 => match denominator {
-                1 => Len::Whole,
-                2 => Len::Half,
-                4 => Len::Quarter,
-                8 => Len::Eighth,
-                16 => Len::Sixteenth,
-                32 => Len::Thirtysecond,
-                64 => Len::Sixtyfourth,
-                _ => Len::Quarter,
+                1 => Some(Len::Whole),
+                2 => Some(Len::Half),
+                4 => Some(Len::Quarter),
+                8 => Some(Len::Eighth),
+                16 => Some(Len::Sixteenth),
+                32 => Some(Len::Thirtysecond),
+                64 => Some(Len::Sixtyfourth),
+                _ => None,
             },
             2 => match denominator {
-                1 => Len::Double,
-                _ => Len::Quarter,
+                1 => Some(Len::Double),
+                _ => None,
             },
-            _ => Len::Quarter,
+            _ => None,
         };
-        match dot {
-            None => Value::Len(len),
-            Some(_) => Value::Dot(len),
+        if let Some(len) = len {
+            match dot {
+                None => Value::Len(len),
+                Some(_) => Value::Dot(len),
+            }
+        } else {
+            Value::Frac(numerator as f32 / denominator as f32)
         }
     }
 
@@ -39,6 +44,11 @@ impl Value {
                 let dot_beats = beats * 1.5;
                 1.0 / dot_beats
             }
+            Value::Frac(f) => {
+                let whole = Self::from(1, 1, None);
+                let beats = 1.0 / whole.per_beat();
+                1.0 / (f * beats)
+            }
         }
     }
 
@@ -46,6 +56,7 @@ impl Value {
         match &self {
             Value::Len(ln) => ln.secs(bpm),
             Value::Dot(ln) => ln.secs(bpm) * 1.5,
+            Value::Frac(f) => Self::from(1, 1, None).secs(bpm) * f,
         }
     }
 }
@@ -96,6 +107,12 @@ mod tests {
             assert!(true);
         } else {
             assert!(false, "Sixtyfourth note not recognized");
+        }
+
+        if let Value::Frac(0.25) = Value::from(3, 12, None) {
+            assert!(true);
+        } else {
+            assert!(false, "Quarter fraction not recognized");
         }
     }
 
