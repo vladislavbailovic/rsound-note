@@ -1,7 +1,7 @@
 use crate::Midi;
 use crate::{Octave, PitchClass, Value};
 
-#[derive(Debug)]
+#[derive(Copy, Clone, Debug)]
 pub enum Note {
     Tone(PitchClass, Octave, Value),
     Rest(Value),

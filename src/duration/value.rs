@@ -36,7 +36,7 @@ impl Value {
         }
     }
 
-    pub(crate) fn per_beat(&self) -> f32 {
+    pub fn per_beat(&self) -> f32 {
         match &self {
             Value::Len(ln) => ln.per_beat(),
             Value::Dot(ln) => {
