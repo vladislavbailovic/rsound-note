@@ -45,8 +45,8 @@ impl Value {
                 1.0 / dot_beats
             }
             Value::Frac(f) => {
-                let whole = Self::from(1, 1, None);
-                let beats = 1.0 / whole.per_beat();
+                let quarter = Self::from(1, 4, None);
+                let beats = 1.0 / quarter.per_beat();
                 1.0 / (f * beats)
             }
         }
