@@ -21,6 +21,13 @@ impl Note {
             Self::Rest(v) => v.per_beat(),
         }
     }
+
+    pub fn secs(&self, bpm: f32) -> f32 {
+        match &self {
+            Self::Tone(_, _, v) => v.secs(bpm),
+            Self::Rest(v) => v.secs(bpm),
+        }
+    }
 }
 
 #[macro_export]

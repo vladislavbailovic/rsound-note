@@ -52,7 +52,7 @@ impl Value {
         }
     }
 
-    fn secs(&self, bpm: f32) -> f32 {
+    pub(crate) fn secs(&self, bpm: f32) -> f32 {
         match &self {
             Value::Len(ln) => ln.secs(bpm),
             Value::Dot(ln) => ln.secs(bpm) * 1.5,

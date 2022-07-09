@@ -9,13 +9,19 @@ pub struct Roll {
     height: usize,
 }
 
-impl Roll {
-    pub fn new() -> Self {
+impl Default for Roll {
+    fn default() -> Self {
         Self {
             beats_per_bar: 4,
             width: MIN_WIDTH as usize,
             height: MAX_HEIGHT as usize,
         }
+    }
+}
+
+impl Roll {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn beats(&mut self, beats: usize) -> &mut Self {
@@ -41,7 +47,7 @@ impl Roll {
                 for y in posy..posy + bheight {
                     for x in relx..posx {
                         let offset = (y * self.width * 3) + (x * 3);
-                        buffer[offset + 0] = block_color.0;
+                        buffer[offset] = block_color.0;
                         buffer[offset + 1] = block_color.1;
                         buffer[offset + 2] = block_color.2;
                     }
@@ -53,6 +59,7 @@ impl Roll {
         buffer
     }
 
+    #[allow(clippy::unused_io_amount)]
     pub fn draw(&self, fname: &str, raw: &[(Option<i32>, f32)]) -> std::io::Result<()> {
         let mut p = BufWriter::new(File::create(fname)?);
         p.write(format!("P6 {} {} 255\n", self.width, self.height).as_bytes())?;
@@ -74,7 +81,7 @@ impl Roll {
             for x in 0..self.width {
                 let offset = ((y * self.width * 3) + (x * 3)) as usize;
                 if x % bwidth == 0 || y % bheight == 0 {
-                    buffer[offset + 0] = fg_color.0;
+                    buffer[offset] = fg_color.0;
                     buffer[offset + 1] = fg_color.1;
                     buffer[offset + 2] = fg_color.2;
                 } else {
@@ -84,7 +91,7 @@ impl Roll {
                     } else {
                         bg_color_dark
                     };
-                    buffer[offset + 0] = bg_color.0;
+                    buffer[offset] = bg_color.0;
                     buffer[offset + 1] = bg_color.1;
                     buffer[offset + 2] = bg_color.2;
                 }
