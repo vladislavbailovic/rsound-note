@@ -3,23 +3,13 @@ use note::graph::Roll;
 
 use note::*;
 
-macro_rules! sequence {
-    ($($x:expr),+) => {
-        {
-            let mut seq: Vec<Box<dyn Notation>> = Vec::new();
-            $(seq.push(Box::new($x));)*
-            Sequence::new(seq)
-        }
-    }
-}
-
 struct Sequence {
-    seq: Vec<Box<dyn Notation>>
+    seq: Vec<Note>,
 }
 
 use std::ops::Deref;
 impl Deref for Sequence {
-    type Target = Vec<Box<dyn Notation>>;
+    type Target = Vec<Note>;
 
     fn deref(&self) -> &Self::Target {
         &self.seq
@@ -27,8 +17,8 @@ impl Deref for Sequence {
 }
 
 impl Sequence {
-    pub fn new(seq: Vec<Box<dyn Notation>>) -> Self {
-        Sequence{seq}
+    pub fn new(seq: Vec<Note>) -> Self {
+        Sequence { seq }
     }
 
     pub fn humanize(&mut self) -> &mut Self {
@@ -41,15 +31,15 @@ impl Sequence {
 }
 
 fn get_blocks() -> Vec<(Option<i32>, f32)> {
-    sequence![
+    Sequence::new(vec![
         note![A: C0, 1 / 4],
         pause![1 / 14],
         note![C: C1, 1 / 4 T],
         pause![1 / 14],
         note![A: C0, 1 / 8],
         pause![1 / 14],
-        note![B: C0, 1 / 8 T]
-    ]
+        note![B: C0, 1 / 8 T],
+    ])
     .humanize()
     .iter()
     .map(|n| {

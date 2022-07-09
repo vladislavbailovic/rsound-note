@@ -1,75 +1,45 @@
 use crate::Midi;
 use crate::{Octave, PitchClass, Value};
 
-pub trait Notation {
-    fn midi(&self) -> Option<i32>;
-    fn per_beat(&self) -> f32;
-}
-
 #[derive(Debug)]
-pub struct Note {
-    pitch_class: PitchClass,
-    octave: Octave,
-    value: Value,
+pub enum Note {
+    Tone(PitchClass, Octave, Value),
+    Rest(Value),
 }
 
 impl Note {
-    pub fn new(pitch_class: PitchClass, octave: Octave, value: Value) -> Self {
-        Self {
-            pitch_class,
-            octave,
-            value,
+    pub fn midi(&self) -> Option<i32> {
+        match &self {
+            Self::Tone(p, o, _) => Some(p.midi(o)),
+            Self::Rest(_) => None,
         }
     }
-}
 
-impl Notation for Note {
-    fn midi(&self) -> Option<i32> {
-        Some(self.pitch_class.midi(&self.octave))
-    }
-
-    fn per_beat(&self) -> f32 {
-        self.value.per_beat()
-    }
-}
-
-#[derive(Debug)]
-pub struct Pause {
-    value: Value,
-}
-
-impl Pause {
-    pub fn new(value: Value) -> Self {
-        Self { value }
-    }
-}
-
-impl Notation for Pause {
-    fn midi(&self) -> Option<i32> {
-        None
-    }
-    fn per_beat(&self) -> f32 {
-        self.value.per_beat()
+    pub fn per_beat(&self) -> f32 {
+        match &self {
+            Self::Tone(_, _, v) => v.per_beat(),
+            Self::Rest(v) => v.per_beat(),
+        }
     }
 }
 
 #[macro_export]
 macro_rules! note {
     ($pc:tt : $oct:tt, $numerator:tt / $denominator:tt T) => {
-        Note::new(PitchClass::$pc, Octave::$oct, val![$numerator/$denominator T])
+        Note::Tone(PitchClass::$pc, Octave::$oct, val![$numerator/$denominator T])
     };
     ($pc:tt : $oct:tt, $numerator:tt / $denominator:tt) => {
-        Note::new(PitchClass::$pc, Octave::$oct, val![$numerator/$denominator])
+        Note::Tone(PitchClass::$pc, Octave::$oct, val![$numerator/$denominator])
     };
     ($pc:tt : $oct:tt) => {
-        Note::new(PitchClass::$pc, Octave::$oct, Value::Len(Len::Quarter))
+        Note::Tone(PitchClass::$pc, Octave::$oct, Value::Len(Len::Quarter))
     }
 }
 
 #[macro_export]
 macro_rules! pause {
     ($numerator:tt / $denominator:tt) => {
-        Pause::new(val![$numerator/$denominator T])
+        Note::Rest(val![$numerator/$denominator T])
     };
 }
 
@@ -81,24 +51,21 @@ mod tests {
     #[test]
     fn note_macro_default_len() {
         let note = note![E: C4];
-        assert_eq!(note.pitch_class, PitchClass::E);
-        assert_eq!(note.octave, Octave::C4);
-        assert_eq!(note.value, Value::Len(Len::Quarter));
+        assert_eq!(note.midi(), Some(Octave::C4.midi(&PitchClass::E)));
+        assert_eq!(note.per_beat(), Value::Len(Len::Quarter).per_beat());
     }
 
     #[test]
     fn note_macro_explicit_len() {
         let note = note![E: C4, 1 / 2];
-        assert_eq!(note.pitch_class, PitchClass::E);
-        assert_eq!(note.octave, Octave::C4);
-        assert_eq!(note.value, Value::Len(Len::Half));
+        assert_eq!(note.midi(), Some(Octave::C4.midi(&PitchClass::E)));
+        assert_eq!(note.per_beat(), Value::Len(Len::Half).per_beat());
     }
 
     #[test]
     fn note_macro_explicit_len_t() {
         let note = note![E:C4, 1/2 T];
-        assert_eq!(note.pitch_class, PitchClass::E);
-        assert_eq!(note.octave, Octave::C4);
-        assert_eq!(note.value, Value::Dot(Len::Half));
+        assert_eq!(note.midi(), Some(Octave::C4.midi(&PitchClass::E)));
+        assert_eq!(note.per_beat(), Value::Dot(Len::Half).per_beat());
     }
 }
