@@ -56,7 +56,7 @@ impl Value {
         match &self {
             Value::Len(ln) => ln.secs(bpm),
             Value::Dot(ln) => ln.secs(bpm) * 1.5,
-            Value::Frac(f) => Self::from(1, 1, None).secs(bpm) * f,
+            Value::Frac(f) => Self::from(1, 4, None).secs(bpm) * f,
         }
     }
 }
@@ -109,8 +109,8 @@ mod tests {
             assert!(false, "Sixtyfourth note not recognized");
         }
 
-        if let Value::Frac(0.25) = Value::from(3, 12, None) {
-            assert!(true);
+        if let Value::Frac(n) = Value::from(3, 12, None) {
+            assert_eq!(n, 0.25);
         } else {
             assert!(false, "Quarter fraction not recognized");
         }
