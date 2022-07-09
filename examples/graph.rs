@@ -6,10 +6,37 @@ use note::*;
 macro_rules! sequence {
     ($($x:expr),+) => {
         {
-            let mut sequence: Vec<Box<dyn Notation>> = Vec::new();
-            $(sequence.push(Box::new($x));)*
-            sequence
+            let mut seq: Vec<Box<dyn Notation>> = Vec::new();
+            $(seq.push(Box::new($x));)*
+            Sequence::new(seq)
         }
+    }
+}
+
+struct Sequence {
+    seq: Vec<Box<dyn Notation>>
+}
+
+use std::ops::Deref;
+impl Deref for Sequence {
+    type Target = Vec<Box<dyn Notation>>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.seq
+    }
+}
+
+impl Sequence {
+    pub fn new(seq: Vec<Box<dyn Notation>>) -> Self {
+        Sequence{seq}
+    }
+
+    pub fn humanize(&mut self) -> &mut Self {
+        for x in &self.seq {
+            // TODO: actually humanize the sequence
+            eprintln!("{:#?}", x.midi());
+        }
+        self
     }
 }
 
@@ -23,6 +50,7 @@ fn get_blocks() -> Vec<(Option<i32>, f32)> {
         pause![1 / 14],
         note![B: C0, 1 / 8 T]
     ]
+    .humanize()
     .iter()
     .map(|n| {
         let y = n.midi();
