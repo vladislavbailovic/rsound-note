@@ -3,26 +3,26 @@ use note::graph::Roll;
 
 use note::*;
 
-struct Sequence {
-    seq: Vec<Note>,
+struct Sequence<'a> {
+    seq: &'a [Note],
 }
 
 use std::ops::Deref;
-impl Deref for Sequence {
-    type Target = Vec<Note>;
+impl<'a> Deref for Sequence<'a> {
+    type Target = &'a [Note];
 
     fn deref(&self) -> &Self::Target {
         &self.seq
     }
 }
 
-impl Sequence {
-    pub fn new(seq: Vec<Note>) -> Self {
+impl<'a> Sequence<'a> {
+    pub fn new(seq: &'a [Note]) -> Self {
         Sequence { seq }
     }
 
     pub fn humanize(&mut self) -> &mut Self {
-        for x in &self.seq {
+        for x in self.seq {
             // TODO: actually humanize the sequence
             eprintln!("{:#?}", x.midi());
         }
@@ -31,7 +31,7 @@ impl Sequence {
 }
 
 fn get_blocks() -> Vec<(Option<i32>, f32)> {
-    Sequence::new(vec![
+    Sequence::new(&[
         note![A: C0, 1 / 4],
         pause![1 / 14],
         note![C: C1, 1 / 4 T],
