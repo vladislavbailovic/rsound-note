@@ -191,4 +191,24 @@ mod tests {
         assert_eq!(Value::Dot(Len::Thirtysecond).secs(60.0), 0.1875);
         assert_eq!(Value::Dot(Len::Sixtyfourth).secs(60.0), 0.09375);
     }
+
+    #[test]
+    fn sub() {
+        assert_eq!(
+            Value::Len(Len::Half) - Value::Len(Len::Quarter),
+            Value::Frac(1.0)
+        );
+    }
+}
+
+use std::ops;
+
+impl ops::Sub<Value> for Value {
+    type Output = Value;
+
+    fn sub(self, rhs: Value) -> Value {
+        let lbeats = 1.0 / self.per_beat();
+        let rbeats = 1.0 / rhs.per_beat();
+        Value::Frac(lbeats - rbeats)
+    }
 }
