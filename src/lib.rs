@@ -12,9 +12,6 @@ pub use pitch_class::PitchClass;
 mod note;
 pub use crate::note::*;
 
-#[cfg(feature = "graph")]
-pub mod graph;
-
 trait Numeric {
     fn numeric(&self) -> i32;
 }
