@@ -3,35 +3,46 @@ use note::graph::Roll;
 
 use note::*;
 
-struct Sequence<'a> {
-    seq: &'a [Note],
+struct Sequence {
+    seq: Vec<Note>,
 }
 
 use std::ops::Deref;
-impl<'a> Deref for Sequence<'a> {
-    type Target = &'a [Note];
+impl Deref for Sequence {
+    type Target = Vec<Note>;
 
     fn deref(&self) -> &Self::Target {
         &self.seq
     }
 }
 
-impl<'a> Sequence<'a> {
-    pub fn new(seq: &'a [Note]) -> Self {
+impl Sequence {
+    pub fn new(seq: Vec<Note>) -> Self {
         Sequence { seq }
     }
 
     pub fn humanize(&mut self) -> &mut Self {
-        for x in self.seq {
-            // TODO: actually humanize the sequence
-            eprintln!("{:#?}", x.midi());
+        let mut result = Vec::new();
+        for (idx, &x) in self.seq.iter().enumerate() {
+            if let Note::Tone(p, o, val) = x {
+                let offset = Value::from(1, 128, None);
+                if offset.per_beat() > val.per_beat() {
+                    result.push(Note::Rest(offset));
+                    result.push(Note::Tone(p, o, val - offset));
+                } else {
+                    result.push(x);
+                }
+            } else {
+                result.push(x);
+            }
         }
+        self.seq = result;
         self
     }
 }
 
 fn get_blocks() -> Vec<(Option<i32>, f32)> {
-    Sequence::new(&[
+    Sequence::new(vec![
         note![A: C0, 1 / 4],
         pause![1 / 14],
         note![C: C1, 1 / 4 T],
@@ -40,7 +51,7 @@ fn get_blocks() -> Vec<(Option<i32>, f32)> {
         pause![1 / 14],
         note![B: C0, 1 / 8 T],
     ])
-    .humanize()
+    // .humanize()
     .iter()
     .map(|n| {
         let y = n.midi();
@@ -58,6 +69,60 @@ fn main() -> std::io::Result<()> {
     let mut roll = Roll::new();
     roll.beats(4);
     roll.draw("foo.ppm", &blocks);
+
+    eprintln!(
+        "notes: {}",
+        blocks
+            .iter()
+            .map(|x| {
+                if x.0.is_some() {
+                    1
+                } else {
+                    0
+                }
+            })
+            .sum::<i32>()
+    );
+    eprintln!(
+        "play time: {}",
+        blocks
+            .iter()
+            .map(|x| {
+                if x.0.is_some() {
+                    x.1
+                } else {
+                    0.0
+                }
+            })
+            .sum::<f32>()
+    );
+    eprintln!(
+        "pauses: {}",
+        blocks
+            .iter()
+            .map(|x| {
+                if x.0.is_none() {
+                    1
+                } else {
+                    0
+                }
+            })
+            .sum::<i32>()
+    );
+    eprintln!(
+        "pause time: {}",
+        blocks
+            .iter()
+            .map(|x| {
+                if x.0.is_none() {
+                    x.1
+                } else {
+                    0.0
+                }
+            })
+            .sum::<f32>()
+    );
+    eprintln!("total: {}", blocks.iter().map(|x| x.1).sum::<f32>());
 
     Ok(())
 }
