@@ -11,12 +11,12 @@ pub enum Len {
 }
 
 impl Len {
-    pub(crate) fn per_beat(&self) -> f32 {
+    pub(crate) fn per_beat(&self) -> f64 {
         let ord = *self as i32 + 1;
-        2.0_f32.powf(ord as f32) / 16.0
+        2.0_f64.powf(ord as f64) / 16.0
     }
 
-    pub(crate) fn secs(&self, bpm: f32) -> f32 {
+    pub(crate) fn secs(&self, bpm: f64) -> f64 {
         let beats = self.per_beat();
         60.0 / bpm / beats
     }

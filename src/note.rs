@@ -1,4 +1,4 @@
-use crate::Midi;
+use crate::{Freq, Midi};
 use crate::{Octave, PitchClass, Value};
 
 #[derive(Copy, Clone, Debug)]
@@ -15,14 +15,21 @@ impl Note {
         }
     }
 
-    pub fn per_beat(&self) -> f32 {
+    pub fn freq(&self) -> Option<f64> {
+        match &self {
+            Self::Tone(p, o, _) => Some(p.freq(o)),
+            Self::Rest(_) => None,
+        }
+    }
+
+    pub fn per_beat(&self) -> f64 {
         match &self {
             Self::Tone(_, _, v) => v.per_beat(),
             Self::Rest(v) => v.per_beat(),
         }
     }
 
-    pub fn secs(&self, bpm: f32) -> f32 {
+    pub fn secs(&self, bpm: f64) -> f64 {
         match &self {
             Self::Tone(_, _, v) => v.secs(bpm),
             Self::Rest(v) => v.secs(bpm),

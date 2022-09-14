@@ -4,7 +4,7 @@ use crate::Len;
 pub enum Value {
     Len(Len),
     Dot(Len),
-    Frac(f32),
+    Frac(f64),
 }
 
 impl Value {
@@ -32,11 +32,11 @@ impl Value {
                 Some(_) => Value::Dot(len),
             }
         } else {
-            Value::Frac(numerator as f32 / denominator as f32)
+            Value::Frac(numerator as f64 / denominator as f64)
         }
     }
 
-    pub fn per_beat(&self) -> f32 {
+    pub fn per_beat(&self) -> f64 {
         match &self {
             Value::Len(ln) => ln.per_beat(),
             Value::Dot(ln) => {
@@ -52,7 +52,7 @@ impl Value {
         }
     }
 
-    pub fn secs(&self, bpm: f32) -> f32 {
+    pub fn secs(&self, bpm: f64) -> f64 {
         match &self {
             Value::Len(ln) => ln.secs(bpm),
             Value::Dot(ln) => ln.secs(bpm) * 1.5,
