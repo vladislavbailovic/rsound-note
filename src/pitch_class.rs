@@ -32,6 +32,34 @@ impl Midi<Octave> for PitchClass {
 }
 impl Freq<Octave> for PitchClass {}
 
+impl PitchClass {
+    pub fn try_from_int(value: i32) -> Option<Self> {
+        match value {
+            0 => Some(Self::C),
+            1 => Some(Self::Cis),
+            2 => Some(Self::D),
+            3 => Some(Self::Dis),
+            4 => Some(Self::E),
+            5 => Some(Self::F),
+            6 => Some(Self::Fis),
+            7 => Some(Self::G),
+            8 => Some(Self::Gis),
+            9 => Some(Self::A),
+            10 => Some(Self::B),
+            11 => Some(Self::H),
+            _ => None,
+        }
+    }
+
+    pub fn max() -> i32 {
+        12
+    }
+
+    pub fn min() -> i32 {
+        0
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
