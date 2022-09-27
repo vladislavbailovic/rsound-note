@@ -1,6 +1,10 @@
 use crate::octave::*;
 use crate::{Freq, Midi, Numeric};
 
+#[cfg(feature = "wasm")]
+use wasm_bindgen::prelude::*;
+
+#[cfg_attr(feature = "wasm", wasm_bindgen)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum PitchClass {
     C,
