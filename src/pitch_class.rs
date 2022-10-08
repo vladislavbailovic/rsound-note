@@ -64,6 +64,12 @@ impl PitchClass {
     }
 }
 
+impl From<i32> for PitchClass {
+    fn from(x: i32) -> Self {
+        Self::try_from_int(x).unwrap_or(Self::A)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -62,6 +62,12 @@ impl Octave {
     }
 }
 
+impl From<i32> for Octave {
+    fn from(x: i32) -> Self {
+        Self::try_from_int(x).unwrap_or(Self::C3)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
