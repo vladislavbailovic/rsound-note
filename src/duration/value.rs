@@ -36,6 +36,14 @@ impl Value {
         }
     }
 
+    pub fn from_secs(s: f64, bpm: f64) -> Self {
+        let scale = 100;
+        let beat_secs = Self::from(1, 4, None).secs(bpm);
+        let diff = s / beat_secs;
+        let numerator = (diff * scale as f64).ceil() as usize;
+        Self::from(numerator, scale, None)
+    }
+
     pub fn per_beat(&self) -> f64 {
         match &self {
             Value::Len(ln) => ln.per_beat(),
